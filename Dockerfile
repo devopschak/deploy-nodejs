@@ -1,14 +1,15 @@
-# syntax=docker/dockerfile:1
+FROM node:latest
 
-FROM node:12.18.1
-ENV NODE_ENV=production
-
+RUN mkdir /app
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json*", "./"]
+ENV PATH /app/node_modules/.bin:$PATH
 
-RUN npm install --production
+COPY package.json package-lock.json /app/
+RUN npm install
 
-COPY . .
+# Or if you're using Yarn
+# ADD package.json yarn.lock /app/
+# RUN yarn install
 
-CMD [ "node", "server.js" ]
+COPY . /app/
